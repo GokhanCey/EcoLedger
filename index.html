@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoLedger | PDF Bank Statement Converter</title>
+    <meta name="description" content="EcoLedger turns Italian bank PDFs into clean Excel files, entirely on your device. No uploads. No risk. No re-typing.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --primary-light: #d1fae5;
+            --text-main: #1f2937;
+            --text-muted: #4b5563;
+            --bg-body: #ffffff;
+            --bg-alt: #f9fafb;
+            --card-border: #e5e7eb;
+            --font-family: 'Barlow Semi Condensed', sans-serif;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.5;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, h4 {
+            line-height: 1.2;
+            font-weight: 700;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--text-muted);
+            font-size: 1.125rem;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            text-align: center;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2), 0 2px 4px -1px rgba(16, 185, 129, 0.1);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3), 0 4px 6px -2px rgba(16, 185, 129, 0.15);
+        }
+
+        /* Header / Nav */
+        header {
+            padding: 1.5rem 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 10;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo svg {
+            width: 2rem;
+            height: 2rem;
+            fill: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 10rem 0 6rem;
+            text-align: center;
+            position: relative;
+            background: radial-gradient(circle at center top, var(--primary-light) 0%, var(--bg-body) 70%);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            max-width: 900px;
+            margin: 0 auto 1.5rem;
+            color: var(--text-main);
+            letter-spacing: -0.02em;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 6rem 0;
+            background-color: var(--bg-body);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background-color: var(--primary);
+            margin: 1rem auto 0;
+            border-radius: 2px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background-color: var(--bg-body);
+            border: 1px solid var(--card-border);
+            border-radius: 1rem;
+            padding: 2.5rem 2rem;
+            transition: var(--transition);
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-light);
+        }
+
+        .card-icon {
+            width: 4rem;
+            height: 4rem;
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+        }
+
+        .card-icon svg {
+            width: 2rem;
+            height: 2rem;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 6rem 0;
+            background-color: var(--bg-alt);
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 6rem 0;
+            background-color: var(--bg-body);
+        }
+
+        .pricing-subtitle {
+            text-align: center;
+            color: var(--primary-dark);
+            font-weight: 600;
+            margin-top: -2rem;
+            margin-bottom: 3rem;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .pricing-card {
+            background-color: var(--bg-body);
+            border: 1px solid var(--card-border);
+            border-radius: 1rem;
+            padding: 3rem 2rem;
+            text-align: center;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card.featured {
+            border: 2px solid var(--primary);
+            box-shadow: 0 20px 25px -5px rgba(16, 185, 129, 0.1);
+            transform: scale(1.05);
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: 1rem;
+            right: -2rem;
+            background-color: var(--primary);
+            color: white;
+            font-size: 0.875rem;
+            font-weight: 700;
+            padding: 0.25rem 3rem;
+            transform: rotate(45deg);
+        }
+
+        .pricing-card:hover {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .pricing-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .price {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin: 1.5rem 0;
+            display: flex;
+            justify-content: center;
+            align-items: baseline;
+        }
+
+        .price span {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .pricing-features li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .pricing-features li svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            fill: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .pricing-card .btn {
+            width: 100%;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary-dark);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--text-main);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        footer p {
+            color: #9ca3af;
+            margin: 0;
+        }
+
+        /* Animations */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+            .grid, .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container nav-container">
+            <div class="logo">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+                EcoLedger
+            </div>
+            <div style="display: flex; align-items: center; gap: 1.5rem;">
+                <a href="app.html" style="font-weight: 600; color: var(--text-main); transition: color 0.3s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-main)'">See the app</a>
+                <a href="#pricing" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 1rem;">Start Free Trial</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1 class="fade-in-up">Your clients' bank statements. Converted in seconds. Never leaving your computer.</h1>
+            <p class="fade-in-up" style="transition-delay: 0.1s;">EcoLedger turns Italian bank PDFs into clean Excel files, entirely on your device. No uploads. No risk. No re-typing.</p>
+            <div class="fade-in-up" style="transition-delay: 0.2s;">
+                <a href="#pricing" class="btn btn-primary">Start Free Trial</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem">
+        <div class="container">
+            <h2 class="section-title fade-in-up">The problem every commercialista knows</h2>
+            <div class="grid">
+                <div class="card fade-in-up">
+                    <div class="card-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    </div>
+                    <h3>Hundreds of PDFs every month, entered by hand</h3>
+                </div>
+                <div class="card fade-in-up" style="transition-delay: 0.1s;">
+                    <div class="card-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    </div>
+                    <h3>Online tools exist but uploading client data is a professional liability</h3>
+                </div>
+                <div class="card fade-in-up" style="transition-delay: 0.2s;">
+                    <div class="card-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                    </div>
+                    <h3>Italian bank formats are inconsistent and unpredictable</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution">
+        <div class="container">
+            <h2 class="section-title fade-in-up">One tool. Built for Italian accountants.</h2>
+            <div class="grid">
+                <div class="card fade-in-up">
+                    <div class="card-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <h3>Local Processing</h3>
+                    <p>Everything runs on your machine. Client data never touches our servers.</p>
+                </div>
+                <div class="card fade-in-up" style="transition-delay: 0.1s;">
+                    <div class="card-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path></svg>
+                    </div>
+                    <h3>Italian Bank Formats</h3>
+                    <p>Built around Intesa Sanpaolo, UniCredit, BancoBPM, and more.</p>
+                </div>
+                <div class="card fade-in-up" style="transition-delay: 0.2s;">
+                    <div class="card-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    </div>
+                    <h3>Audit Ready Output</h3>
+                    <p>Clean XLS files ready for your workflow in seconds.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <h2 class="section-title fade-in-up">Simple pricing. No surprises.</h2>
+            <p class="pricing-subtitle fade-in-up">Annual plans available at 50 percent discount.</p>
+            <div class="pricing-grid">
+                <div class="pricing-card fade-in-up">
+                    <h3>Starter</h3>
+                    <div class="price">€30<span>/month</span></div>
+                    <ul class="pricing-features">
+                        <li>
+                            <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+                            400 pages per month
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+                            Local processing
+                        </li>
+                    </ul>
+                    <a href="#" class="btn btn-outline">Get Started</a>
+                </div>
+                <div class="pricing-card featured fade-in-up" style="transition-delay: 0.1s;">
+                    <div class="featured-badge">Popular</div>
+                    <h3>Professional</h3>
+                    <div class="price">€60<span>/month</span></div>
+                    <ul class="pricing-features">
+                        <li>
+                            <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+                            1000 pages per month
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+                            Local processing
+                        </li>
+                    </ul>
+                    <a href="#" class="btn btn-primary">Get Started</a>
+                </div>
+                <div class="pricing-card fade-in-up" style="transition-delay: 0.2s;">
+                    <h3>Business</h3>
+                    <div class="price">€99<span>/month</span></div>
+                    <ul class="pricing-features">
+                        <li>
+                            <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+                            4000 pages per month
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+                            Local processing
+                        </li>
+                    </ul>
+                    <a href="#" class="btn btn-outline">Get Started</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="logo" style="justify-content: center; margin-bottom: 1rem; color: white;">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="fill: var(--primary);">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+                EcoLedger
+            </div>
+            <p>EcoLedger. Built for Italian accountants. Your data stays yours. Always.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.fade-in-up').forEach(element => {
+                observer.observe(element);
+            });
+
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

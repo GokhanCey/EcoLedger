@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoLedger | Download and Demo</title>
+    <meta name="description" content="Download EcoLedger and see how it converts Italian bank PDFs into clean Excel files entirely on your device.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --primary-light: #d1fae5;
+            --text-main: #1f2937;
+            --text-muted: #4b5563;
+            --bg-body: #ffffff;
+            --bg-alt: #f9fafb;
+            --card-border: #e5e7eb;
+            --font-family: 'Barlow Semi Condensed', sans-serif;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.5;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, h4 {
+            line-height: 1.2;
+            font-weight: 700;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--text-muted);
+            font-size: 1.125rem;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            text-align: center;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2), 0 2px 4px -1px rgba(16, 185, 129, 0.1);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3), 0 4px 6px -2px rgba(16, 185, 129, 0.15);
+        }
+
+        /* Header / Nav */
+        header {
+            padding: 1.5rem 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 10;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo svg {
+            width: 2rem;
+            height: 2rem;
+            fill: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            font-weight: 600;
+            color: var(--text-main);
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        /* Hero / Download Section */
+        .hero {
+            padding: 10rem 0 6rem;
+            text-align: center;
+            position: relative;
+            background: radial-gradient(circle at center top, var(--primary-light) 0%, var(--bg-body) 70%);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin: 0 auto 1.5rem;
+            color: var(--text-main);
+            letter-spacing: -0.02em;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin: 0 auto 2.5rem;
+        }
+
+        /* Tooltips */
+        .tooltip-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip-container .tooltip-text {
+            visibility: hidden;
+            width: max-content;
+            max-width: 280px;
+            background-color: #1f2937;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px 12px;
+            position: absolute;
+            z-index: 20;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.875rem;
+            font-weight: 500;
+            pointer-events: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .tooltip-container .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 6px;
+            border-style: solid;
+            border-color: #1f2937 transparent transparent transparent;
+        }
+
+        .tooltip-container:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .btn-disabled {
+            background-color: #cbd5e1 !important;
+            color: #64748b !important;
+            cursor: not-allowed !important;
+            box-shadow: none !important;
+        }
+
+        /* Inputs */
+        .license-form {
+            max-width: 450px;
+            margin: 3rem auto 0;
+            padding-top: 2rem;
+            border-top: 1px solid var(--card-border);
+        }
+
+        .license-form p {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 1rem;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .form-control {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            border: 2px solid var(--card-border);
+            border-radius: 0.5rem;
+            font-family: var(--font-family);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+        }
+
+        /* Demo Section */
+        .demo-section {
+            padding: 6rem 0;
+            background-color: var(--bg-alt);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background-color: var(--primary);
+            margin: 1rem auto 0;
+            border-radius: 2px;
+        }
+
+        .app-demo {
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            border: 1px solid var(--card-border);
+            position: relative;
+            height: 400px;
+        }
+
+        .app-header {
+            background: #1f2937;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
+            color: white;
+            font-size: 0.95rem;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .mac-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .mac-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .app-title {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            letter-spacing: 0.5px;
+        }
+
+        .app-body {
+            position: relative;
+            height: calc(100% - 44px);
+            background-color: #fafafa;
+        }
+
+        /* Demo Animations */
+        .demo-step {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            padding: 2rem;
+        }
+
+        .step-1 { animation: step1Anim 10s infinite; }
+        .step-2 { animation: step2Anim 10s infinite; }
+        .step-3 { animation: step3Anim 10s infinite; }
+
+        @keyframes step1Anim {
+            0%, 25% { opacity: 1; z-index: 2; }
+            26%, 100% { opacity: 0; z-index: 0; }
+        }
+
+        @keyframes step2Anim {
+            0%, 25% { opacity: 0; z-index: 0; }
+            26%, 60% { opacity: 1; z-index: 2; }
+            61%, 100% { opacity: 0; z-index: 0; }
+        }
+
+        @keyframes step3Anim {
+            0%, 60% { opacity: 0; z-index: 0; }
+            61%, 95% { opacity: 1; z-index: 2; }
+            96%, 100% { opacity: 0; z-index: 0; }
+        }
+
+        /* Step 1 */
+        .drop-zone {
+            width: 100%;
+            height: 100%;
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8fafc;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .drop-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #94a3b8;
+        }
+
+        .pdf-file {
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 12px 16px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: dropIn 10s infinite;
+        }
+
+        .pdf-icon { width: 32px; height: 32px; fill: #ef4444; }
+        .pdf-name { font-size: 1rem; font-weight: 600; color: #334155; }
+
+        @keyframes dropIn {
+            0% { top: -100px; opacity: 0; }
+            5%, 10% { top: 30%; transform: translate(-50%, -50%); opacity: 1; }
+            15%, 25% { top: 50%; transform: translate(-50%, -50%); opacity: 1; }
+            26%, 100% { opacity: 0; }
+        }
+
+        /* Step 2 */
+        .progress-container {
+            width: 100%;
+            max-width: 80%;
+            text-align: center;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 16px;
+            background: #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            border-radius: 8px;
+            animation: fillBar 10s infinite;
+        }
+
+        .progress-text {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        @keyframes fillBar {
+            0%, 25% { width: 0%; }
+            26% { width: 0%; }
+            55%, 100% { width: 100%; }
+        }
+
+        /* Step 3 */
+        .success-icon {
+            width: 80px; height: 80px;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 1.5rem;
+            animation: popIn 10s infinite;
+        }
+
+        .success-icon svg { width: 40px; height: 40px; }
+        
+        .success-title {
+            font-size: 1.75rem; 
+            font-weight: 700; 
+            margin-bottom: 2rem;
+            color: var(--text-main);
+        }
+
+        .excel-file {
+            background: white;
+            border: 2px solid var(--primary-light);
+            border-radius: 8px;
+            padding: 16px 24px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .excel-icon { width: 32px; height: 32px; fill: var(--primary); }
+        .excel-name { font-size: 1.125rem; font-weight: 700; color: var(--text-main); }
+        .download-arrow { width: 24px; height: 24px; fill: #94a3b8; margin-left: 1rem; }
+
+        @keyframes popIn {
+            0%, 60% { transform: scale(0.5); opacity: 0; }
+            62%, 95% { transform: scale(1); opacity: 1; }
+            96%, 100% { transform: scale(0.5); opacity: 0; }
+        }
+
+        /* Stats Row */
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .stat-box {
+            background: white;
+            border: 1px solid var(--card-border);
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            font-size: 1.125rem;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        /* Banks Section */
+        .banks {
+            padding: 6rem 0;
+            background-color: var(--bg-body);
+        }
+
+        .bank-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .bank-badge {
+            background: white;
+            border: 1px solid var(--card-border);
+            padding: 1.5rem 1rem;
+            text-align: center;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 1.125rem;
+            color: var(--text-main);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+
+        .bank-badge:hover {
+            border-color: var(--primary-light);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--text-main);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        footer p {
+            color: #9ca3af;
+            margin: 0;
+        }
+
+        /* Animations */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .nav-links { gap: 1rem; }
+            .app-demo { height: 350px; }
+            .stats-row { flex-direction: column; align-items: center; gap: 1rem; }
+            .stat-box { width: 100%; text-align: center; max-width: 300px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+                EcoLedger
+            </a>
+            <div class="nav-links">
+                <a href="app.html" class="nav-link">See the app</a>
+                <a href="index.html#pricing" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 1rem;">Start Free Trial</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1 class="fade-in-up">Download EcoLedger</h1>
+            <p class="fade-in-up" style="transition-delay: 0.1s;">Available for Windows. Mac version coming soon.</p>
+            
+            <div class="fade-in-up" style="transition-delay: 0.2s; margin-top: 2rem;">
+                <div class="tooltip-container">
+                    <button class="btn btn-primary btn-disabled" style="padding: 1.25rem 3rem; font-size: 1.25rem;" disabled>
+                        Download for Windows
+                    </button>
+                    <span class="tooltip-text">You need an active subscription to download. Choose a plan on our homepage.</span>
+                </div>
+            </div>
+
+            <div class="license-form fade-in-up" style="transition-delay: 0.3s;">
+                <p>Already have a license? Enter your key below.</p>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Enter license key">
+                    <div class="tooltip-container">
+                        <button class="btn btn-primary btn-disabled" style="padding: 0.75rem 1.5rem;" disabled>Activate</button>
+                        <span class="tooltip-text">Enter a valid license key to activate.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="demo-section">
+        <div class="container">
+            <h2 class="section-title fade-in-up">See it in action</h2>
+            
+            <div class="app-demo fade-in-up" style="transition-delay: 0.1s;">
+                <div class="app-header">
+                    <div class="mac-dots">
+                        <div class="mac-dot dot-red"></div>
+                        <div class="mac-dot dot-yellow"></div>
+                        <div class="mac-dot dot-green"></div>
+                    </div>
+                    <div class="app-title">EcoLedger</div>
+                </div>
+                <div class="app-body">
+                    
+                    <!-- Step 1: Drop zone -->
+                    <div class="demo-step step-1">
+                        <div class="drop-zone">
+                            <div class="drop-text">Drop your PDF here</div>
+                        </div>
+                        <div class="pdf-file">
+                            <svg class="pdf-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M14 2v6h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <text x="7" y="16" font-family="sans-serif" font-weight="bold" font-size="6" fill="currentColor" stroke="none">PDF</text>
+                            </svg>
+                            <span class="pdf-name">Intesa_Sanpaolo_marzo.pdf</span>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Progress -->
+                    <div class="demo-step step-2">
+                        <div class="progress-container">
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill"></div>
+                            </div>
+                            <div class="progress-text">Reading bank format... Intesa Sanpaolo detected</div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Success -->
+                    <div class="demo-step step-3">
+                        <div class="success-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="success-title">Conversion complete</div>
+                        <div class="excel-file">
+                            <svg class="excel-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M14 2v6h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <text x="7" y="16" font-family="sans-serif" font-weight="bold" font-size="6" fill="currentColor" stroke="none">XLS</text>
+                            </svg>
+                            <span class="excel-name">marzo_2024.xlsx</span>
+                            <svg class="download-arrow" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 5v14M19 12l-7 7-7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="stats-row fade-in-up" style="transition-delay: 0.2s;">
+                <div class="stat-box">0 bytes uploaded</div>
+                <div class="stat-box">3 seconds average</div>
+                <div class="stat-box">100% local</div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="banks">
+        <div class="container">
+            <h2 class="section-title fade-in-up">Supported Italian banks</h2>
+            <div class="bank-grid fade-in-up" style="transition-delay: 0.1s;">
+                <div class="bank-badge">Intesa Sanpaolo</div>
+                <div class="bank-badge">UniCredit</div>
+                <div class="bank-badge">BancoBPM</div>
+                <div class="bank-badge">Banco BPM</div>
+                <div class="bank-badge">Mediobanca</div>
+                <div class="bank-badge">Fineco</div>
+                <div class="bank-badge">Credem</div>
+                <div class="bank-badge">Banca Sella</div>
+                <div class="bank-badge">Monte dei Paschi di Siena</div>
+                <div class="bank-badge">Poste Italiane</div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="logo" style="justify-content: center; margin-bottom: 1rem; color: white;">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="fill: var(--primary);">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+                EcoLedger
+            </div>
+            <p>EcoLedger. Built for Italian accountants. Your data stays yours. Always.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.fade-in-up').forEach(element => {
+                observer.observe(element);
+            });
+            
+            // Add interactivity for license input just for demo purposes
+            const licenseInput = document.querySelector('.form-control');
+            const activateBtn = document.querySelector('.license-form .btn-primary');
+            const activateTooltip = document.querySelector('.license-form .tooltip-text');
+            
+            if (licenseInput && activateBtn) {
+                licenseInput.addEventListener('input', (e) => {
+                    if (e.target.value.trim().length > 5) {
+                        activateBtn.classList.remove('btn-disabled');
+                        activateBtn.removeAttribute('disabled');
+                        if (activateTooltip) activateTooltip.style.display = 'none';
+                    } else {
+                        activateBtn.classList.add('btn-disabled');
+                        activateBtn.setAttribute('disabled', 'disabled');
+                        if (activateTooltip) activateTooltip.style.display = '';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
