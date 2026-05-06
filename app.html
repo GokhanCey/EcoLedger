@@ -325,26 +325,21 @@
             padding: 2rem;
         }
 
-        .step-1 { animation: step1Anim 10s infinite; }
-        .step-2 { animation: step2Anim 10s infinite; }
-        .step-3 { animation: step3Anim 10s infinite; }
+        .step-1 { animation: step1Anim 20s infinite; }
+        .step-1-5 { animation: step15Anim 20s infinite; }
+        .step-2 { animation: step2Anim 20s infinite; }
+        .step-2-5 { animation: step25Anim 20s infinite; }
+        .step-3 { animation: step3Anim 20s infinite; }
+        .step-3-5 { animation: step35Anim 20s infinite; }
+        .step-final { animation: stepFinalAnim 20s infinite; }
 
-        @keyframes step1Anim {
-            0%, 25% { opacity: 1; z-index: 2; }
-            26%, 100% { opacity: 0; z-index: 0; }
-        }
-
-        @keyframes step2Anim {
-            0%, 25% { opacity: 0; z-index: 0; }
-            26%, 60% { opacity: 1; z-index: 2; }
-            61%, 100% { opacity: 0; z-index: 0; }
-        }
-
-        @keyframes step3Anim {
-            0%, 60% { opacity: 0; z-index: 0; }
-            61%, 95% { opacity: 1; z-index: 2; }
-            96%, 100% { opacity: 0; z-index: 0; }
-        }
+        @keyframes step1Anim { 0%, 12% { opacity: 1; z-index: 2; } 13%, 100% { opacity: 0; z-index: 0; } }
+        @keyframes step15Anim { 0%, 12% { opacity: 0; z-index: 0; } 13%, 25% { opacity: 1; z-index: 2; } 26%, 100% { opacity: 0; z-index: 0; } }
+        @keyframes step2Anim { 0%, 25% { opacity: 0; z-index: 0; } 26%, 37% { opacity: 1; z-index: 2; } 38%, 100% { opacity: 0; z-index: 0; } }
+        @keyframes step25Anim { 0%, 37% { opacity: 0; z-index: 0; } 38%, 55% { opacity: 1; z-index: 2; } 56%, 100% { opacity: 0; z-index: 0; } }
+        @keyframes step3Anim { 0%, 55% { opacity: 0; z-index: 0; } 56%, 65% { opacity: 1; z-index: 2; } 66%, 100% { opacity: 0; z-index: 0; } }
+        @keyframes step35Anim { 0%, 65% { opacity: 0; z-index: 0; } 66%, 80% { opacity: 1; z-index: 2; } 81%, 100% { opacity: 0; z-index: 0; } }
+        @keyframes stepFinalAnim { 0%, 80% { opacity: 0; z-index: 0; } 81%, 95% { opacity: 1; z-index: 2; } 96%, 100% { opacity: 0; z-index: 0; } }
 
         /* Step 1 */
         .drop-zone {
@@ -379,7 +374,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            animation: dropIn 10s infinite;
+            animation: dropIn 20s infinite;
         }
 
         .pdf-icon { width: 32px; height: 32px; fill: #ef4444; }
@@ -387,10 +382,34 @@
 
         @keyframes dropIn {
             0% { top: -100px; opacity: 0; }
-            5%, 10% { top: 30%; transform: translate(-50%, -50%); opacity: 1; }
-            15%, 25% { top: 50%; transform: translate(-50%, -50%); opacity: 1; }
-            26%, 100% { opacity: 0; }
+            3%, 6% { top: 30%; transform: translate(-50%, -50%); opacity: 1; }
+            9%, 12% { top: 50%; transform: translate(-50%, -50%); opacity: 1; }
+            13%, 100% { opacity: 0; }
         }
+
+        /* Step 1.5 Validating */
+        .loader-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--primary-light);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite, hideLoader 20s infinite;
+            margin-bottom: 1rem;
+        }
+        .validation-text-1 {
+            font-size: 1.25rem; font-weight: 600; color: var(--text-main);
+            animation: hideLoader 20s infinite;
+        }
+        .validation-text-2 {
+            font-size: 1.25rem; font-weight: 600; color: var(--primary-dark);
+            opacity: 0;
+            animation: showValid 20s infinite;
+            position: absolute;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes hideLoader { 0%, 18% { opacity: 1; } 19%, 100% { opacity: 0; } }
+        @keyframes showValid { 0%, 18% { opacity: 0; } 19%, 25% { opacity: 1; } 26%, 100% { opacity: 0; } }
 
         /* Step 2 */
         .progress-container {
@@ -413,7 +432,7 @@
             background: var(--primary);
             width: 0%;
             border-radius: 8px;
-            animation: fillBar 10s infinite;
+            animation: fillBar 20s infinite;
         }
 
         .progress-text {
@@ -425,8 +444,46 @@
         @keyframes fillBar {
             0%, 25% { width: 0%; }
             26% { width: 0%; }
-            55%, 100% { width: 100%; }
+            35%, 100% { width: 100%; }
         }
+
+        /* Step 2.5 Table */
+        .preview-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .preview-table th {
+            background: var(--bg-alt);
+            padding: 8px 12px;
+            text-align: left;
+            color: var(--text-muted);
+            font-weight: 600;
+            border-bottom: 1px solid var(--card-border);
+        }
+        .preview-table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--card-border);
+            color: var(--text-main);
+        }
+        .preview-row {
+            opacity: 0;
+            transform: translateX(-10px);
+        }
+        
+        @keyframes row1Anim { 0%, 39% { opacity: 0; transform: translateX(-10px); } 41%, 100% { opacity: 1; transform: translateX(0); } }
+        @keyframes row2Anim { 0%, 41% { opacity: 0; transform: translateX(-10px); } 43%, 100% { opacity: 1; transform: translateX(0); } }
+        @keyframes row3Anim { 0%, 43% { opacity: 0; transform: translateX(-10px); } 45%, 100% { opacity: 1; transform: translateX(0); } }
+        @keyframes row4Anim { 0%, 45% { opacity: 0; transform: translateX(-10px); } 47%, 100% { opacity: 1; transform: translateX(0); } }
+
+        .row-1 { animation: row1Anim 20s infinite; }
+        .row-2 { animation: row2Anim 20s infinite; }
+        .row-3 { animation: row3Anim 20s infinite; }
+        .row-4 { animation: row4Anim 20s infinite; }
 
         /* Step 3 */
         .success-icon {
@@ -436,7 +493,7 @@
             border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             margin-bottom: 1.5rem;
-            animation: popIn 10s infinite;
+            animation: popIn 20s infinite;
         }
 
         .success-icon svg { width: 40px; height: 40px; }
@@ -444,10 +501,42 @@
         .success-title {
             font-size: 1.75rem; 
             font-weight: 700; 
-            margin-bottom: 2rem;
             color: var(--text-main);
         }
 
+        @keyframes popIn {
+            0%, 55% { transform: scale(0.5); opacity: 0; }
+            57%, 65% { transform: scale(1); opacity: 1; }
+            66%, 100% { transform: scale(0.5); opacity: 0; }
+        }
+
+        /* Step 3.5 Summary */
+        .summary-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+        }
+        .summary-stat {
+            background: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: 1px solid var(--primary-light);
+            font-weight: 600;
+            color: var(--primary-dark);
+            box-shadow: 0 2px 4px rgba(16,185,129,0.1);
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        @keyframes stat1Anim { 0%, 66% { opacity: 0; transform: translateY(10px); } 68%, 100% { opacity: 1; transform: translateY(0); } }
+        @keyframes stat2Anim { 0%, 68% { opacity: 0; transform: translateY(10px); } 70%, 100% { opacity: 1; transform: translateY(0); } }
+        @keyframes stat3Anim { 0%, 70% { opacity: 0; transform: translateY(10px); } 72%, 100% { opacity: 1; transform: translateY(0); } }
+
+        .stat-item-1 { animation: stat1Anim 20s infinite; }
+        .stat-item-2 { animation: stat2Anim 20s infinite; }
+        .stat-item-3 { animation: stat3Anim 20s infinite; }
+
+        /* Final Step */
         .excel-file {
             background: white;
             border: 2px solid var(--primary-light);
@@ -457,16 +546,16 @@
             display: flex;
             align-items: center;
             gap: 16px;
+            animation: finalPop 20s infinite;
         }
 
         .excel-icon { width: 32px; height: 32px; fill: var(--primary); }
         .excel-name { font-size: 1.125rem; font-weight: 700; color: var(--text-main); }
         .download-arrow { width: 24px; height: 24px; fill: #94a3b8; margin-left: 1rem; }
 
-        @keyframes popIn {
-            0%, 60% { transform: scale(0.5); opacity: 0; }
-            62%, 95% { transform: scale(1); opacity: 1; }
-            96%, 100% { transform: scale(0.5); opacity: 0; }
+        @keyframes finalPop {
+            0%, 80% { transform: scale(0.9); opacity: 0; }
+            82%, 100% { transform: scale(1); opacity: 1; }
         }
 
         /* Stats Row */
@@ -630,6 +719,13 @@
                         </div>
                     </div>
 
+                    <!-- Step 1.5: Validating -->
+                    <div class="demo-step step-1-5">
+                        <div class="loader-spinner"></div>
+                        <div class="validation-text-1">Validating file integrity...</div>
+                        <div class="validation-text-2">File valid. 12 pages detected.</div>
+                    </div>
+
                     <!-- Step 2: Progress -->
                     <div class="demo-step step-2">
                         <div class="progress-container">
@@ -640,6 +736,46 @@
                         </div>
                     </div>
 
+                    <!-- Step 2.5: Table -->
+                    <div class="demo-step step-2-5">
+                        <table class="preview-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Amount</th>
+                                    <th>Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="preview-row row-1">
+                                    <td>01/03/2024</td>
+                                    <td>Pagamento utenze</td>
+                                    <td style="color: #ef4444;">-120.00</td>
+                                    <td>4.230.50</td>
+                                </tr>
+                                <tr class="preview-row row-2">
+                                    <td>05/03/2024</td>
+                                    <td>Bonifico in entrata</td>
+                                    <td style="color: #10b981;">+1.500.00</td>
+                                    <td>5.730.50</td>
+                                </tr>
+                                <tr class="preview-row row-3">
+                                    <td>12/03/2024</td>
+                                    <td>Addebito pos</td>
+                                    <td style="color: #ef4444;">-45.50</td>
+                                    <td>5.685.00</td>
+                                </tr>
+                                <tr class="preview-row row-4">
+                                    <td>18/03/2024</td>
+                                    <td>Commissioni bancarie</td>
+                                    <td style="color: #ef4444;">-2.00</td>
+                                    <td>5.683.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
                     <!-- Step 3: Success -->
                     <div class="demo-step step-3">
                         <div class="success-icon">
@@ -648,6 +784,19 @@
                             </svg>
                         </div>
                         <div class="success-title">Conversion complete</div>
+                    </div>
+
+                    <!-- Step 3.5: Summary -->
+                    <div class="demo-step step-3-5">
+                        <div class="summary-stats">
+                            <div class="summary-stat stat-item-1">47 transactions extracted</div>
+                            <div class="summary-stat stat-item-2">0 errors found</div>
+                            <div class="summary-stat stat-item-3">Ready for your accounting software</div>
+                        </div>
+                    </div>
+
+                    <!-- Final: Excel File -->
+                    <div class="demo-step step-final">
                         <div class="excel-file">
                             <svg class="excel-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
